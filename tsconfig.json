@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true, // Opcional, mas recomendado
+    "strict": true, // Boa prática
+    "moduleResolution": "node", // Necessário para compatibilidade
+    "jsx": "react-jsx" // Para React 17+
+  }
+}
