@@ -1,4 +1,5 @@
 import styled, { createGlobalStyle } from 'styled-components';
+import { primaryColor, primaryDarkColor } from '../config/colors';
 
 // Definindo estilos globais
 export default createGlobalStyle`
@@ -14,15 +15,23 @@ export default createGlobalStyle`
   }
 
   body {
-    background: red;
+    background: ${primaryDarkColor};
+    color: ${primaryDarkColor};;
   }
 
   button {
     cursor: pointer;
+    background: ${primaryColor};
+    border: none;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-weight: 700;
   }
 
   a {
     text-decoration: none;
+    color: ${primaryColor};
   }
 
   ul {
@@ -31,7 +40,7 @@ export default createGlobalStyle`
 `;
 
 export const Container = styled.section`
-  max-width: 360px;
+  max-width: 660px;
   background: #FFFF;
   margin: 30px auto;
   padding: 30px;
