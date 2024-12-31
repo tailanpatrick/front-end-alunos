@@ -1,5 +1,6 @@
 import styled, { createGlobalStyle } from 'styled-components';
-import { primaryColor, primaryDarkColor } from '../config/colors';
+import * as colors from '../config/colors';
+import 'react-toastify/dist/ReactToastify.css'
 
 // Definindo estilos globais
 export default createGlobalStyle`
@@ -15,13 +16,13 @@ export default createGlobalStyle`
   }
 
   body {
-    background: ${primaryDarkColor};
-    color: ${primaryDarkColor};;
+    background: ${colors.primaryDarkColor};
+    color: ${colors.primaryDarkColor};;
   }
 
   button {
     cursor: pointer;
-    background: ${primaryColor};
+    background: ${colors.primaryColor};
     border: none;
     color: #fff;
     padding: 10px 20px;
@@ -31,11 +32,37 @@ export default createGlobalStyle`
 
   a {
     text-decoration: none;
-    color: ${primaryColor};
+    color: ${colors.primaryColor};
   }
 
   ul {
     list-style: none;
+  }
+
+  /* Global styles para icone de toasts de sucesso */
+  body .Toastify .Toastify__toast-container .Toastify__toast--success .Toastify__toast-icon  svg{
+    fill: ${colors.successColor};
+    width: 24px;
+    height: 24px;
+  }
+
+  /* Global styles para icone de toasts de error */
+  body .Toastify .Toastify__toast-container .Toastify__toast--error .Toastify__toast-icon {
+    fill: ${colors.errorColor};
+    width: 24px;
+    height: 24px;
+  }
+
+  /* Global styles para a barra de progresso de toasts de sucesso */
+  .Toastify__toast-container .Toastify__toast--success .Toastify__progress-bar {
+    background-color: ${colors.successColor} !important;
+    height: 4px !important;
+    border-radius: 2px !important;
+  }
+
+  /* Global styles para a barra de progresso de toasts de error */
+  .Toastify__toast-container .Toastify__toast--error .Toastify__progress-bar {
+    background-color: red !important;
   }
 `;
 
