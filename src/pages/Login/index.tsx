@@ -6,7 +6,8 @@ import axios from '../../services/axios';
 import { Container } from "../../styles/globalstyles";
 import { Title, Paragraph } from './styled';
 import { toast } from 'react-toastify';
-import { buttonClicked } from "../../store/reducers/buttonSlice";
+
+import { buttonClickedRequest } from "../../store/reducers/buttonRequest";
 
 export default function Login() {
   const dispatch = useDispatch()
@@ -23,7 +24,7 @@ export default function Login() {
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
-    dispatch(buttonClicked());
+    dispatch(buttonClickedRequest());
   }
 
   return (
