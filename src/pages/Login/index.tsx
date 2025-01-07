@@ -6,7 +6,7 @@ import axios from '../../services/axios';
 import { Container } from "../../styles/globalstyles";
 import { Title, Paragraph } from './styled';
 import { toast } from 'react-toastify';
-import { buttonClicked } from "../../store/slices/buttonSlice";
+import { buttonClicked } from "../../store/reducers/buttonSlice";
 
 export default function Login() {
   const dispatch = useDispatch()
