@@ -1,16 +1,15 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { FaHome, FaSignInAlt, FaUserAlt } from 'react-icons/fa';
 
-import { FaHome, FaSignInAlt, FaUserAlt } from "react-icons/fa";
-
-import { Nav } from "./styled";
+import { buttonClickedSuccess } from '../../store/reducers/buttonSuccess';
+import { RootState } from '../../store/store';
+import { Nav } from './styled';
 
 export default function Header() {
-
-  const botaoClicado = useSelector(
-    (state: any) => state.buttonRequest?.clicked
-  );
+  const dispatch = useDispatch();
+  const botaoClicado = useSelector((state: RootState) => state.buttonSuccess.clicked);
 
   return (
     <Nav>
@@ -23,8 +22,9 @@ export default function Header() {
       <Link to="/asasd">
         <FaSignInAlt size={24} />
       </Link>
-
-      {botaoClicado ? "Clicado" : "Não clicado"}
+      <button onClick={() => dispatch(buttonClickedSuccess())}>
+        {botaoClicado ? 'Clicado' : 'Não clicado'}
+      </button>
     </Nav>
   );
 }
