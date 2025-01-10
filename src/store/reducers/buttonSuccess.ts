@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+
 interface ButtonState {
   clicked: boolean;
 }
@@ -14,7 +15,6 @@ const buttonSuccess = createSlice({
   reducers: {
     buttonClickedSuccess: (state) => {
       state.clicked = !state.clicked;
-      console.log('Sucesso!');
     },
   },
 });
