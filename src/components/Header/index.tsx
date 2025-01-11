@@ -8,23 +8,18 @@ import { RootState } from '../../store/store';
 import { Nav } from './styled';
 
 export default function Header() {
-  const dispatch = useDispatch();
-  const botaoClicado = useSelector((state: RootState) => state.buttonSuccess.clicked);
 
   return (
     <Nav>
       <Link to="/">
         <FaHome size={24} />
       </Link>
-      <Link to="/login">
+      <Link to="/register">
         <FaUserAlt size={24} />
       </Link>
-      <Link to="/asasd">
+      <Link to="/login">
         <FaSignInAlt size={24} />
       </Link>
-      <button onClick={() => dispatch(buttonClickedSuccess())}>
-        {botaoClicado ? 'Clicado' : 'Não clicado'}
-      </button>
     </Nav>
   );
 }
