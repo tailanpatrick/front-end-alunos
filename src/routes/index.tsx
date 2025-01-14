@@ -14,7 +14,7 @@ export const AppRoutes = () => {
   return (
     <Routes>
 
-      <Route path="/" element={<MyRoute Component={Students} isClosed={true} />} />
+      <Route path="/" element={<MyRoute Component={Students} isClosed={false} />} />
 
       <Route path="/student/:id/edit" element={<MyRoute Component={Student} isClosed={true} />} />
 
