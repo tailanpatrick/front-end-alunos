@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { FaHome, FaSignInAlt, FaUserAlt } from 'react-icons/fa';
 
-import { buttonClickedSuccess } from '../../store/reducers/buttonSuccess';
+import { actionLoginSuccess } from '../../store/reducers/loginSuccess';
 import { RootState } from '../../store/store';
 import { Nav } from './styled';
 
