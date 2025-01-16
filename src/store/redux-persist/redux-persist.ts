@@ -1,9 +1,9 @@
 import { persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import { combineReducers } from 'redux';
-import buttonRequest from '../reducers/buttonRequest';
-import buttonSuccess from '../reducers/buttonSuccess';
-import buttonFailure from '../reducers/buttonFailure';
+import buttonRequest from '../reducers/loginRequest';
+import buttonSuccess from '../reducers/loginSuccess';
+import buttonFailure from '../reducers/loginFailure';
 
 const persistConfig = {
   key: 'front-end-alunos',

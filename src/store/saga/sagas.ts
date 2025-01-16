@@ -1,27 +1,51 @@
-import { call, put, all, takeLatest } from 'redux-saga/effects';
-import { buttonClickedRequest } from '../reducers/buttonRequest';
-import { buttonClickedSuccess } from '../reducers/buttonSuccess';
-import { buttonClickedFailure } from '../reducers/buttonFailure';
-import { toast } from 'react-toastify'
+import { call, put, takeLatest } from 'redux-saga/effects';
 
-const request = () =>
-  new Promise<void>((resolve, reject) => {
-    setTimeout(() => {
-      resolve(); // Simula sucesso
-    }, 600);
-  });
+import { actionLoginRequest } from '../reducers/loginRequest';
+import { actionLoginSuccess } from '../reducers/loginSuccess';
+import { actionLoginFailure } from '../reducers/loginFailure';
+import axios from '../../services/axios';
+import { toast } from 'react-toastify';
+import { redirect } from 'react-router-dom';
 
-function* handleButtonClick() {
+
+interface LoginResponse {
+  data: {
+    token: string;
+    user: {
+      name: string;
+      id: string;
+      email: string;
+    };
+  };
+}
+
+
+function* handleLogin(action: { payload: { email: string; password: string } }) {
   try {
-    yield call(request);
-    yield put(buttonClickedSuccess());
+    const response: LoginResponse = yield call(axios.post, '/tokens', action.payload);
+    console.log('Login bem-sucedido:', response);
 
-  } catch (err) {
-    yield put(buttonClickedFailure());
+    localStorage.setItem('authData', JSON.stringify(response.data));
 
+    axios.defaults.headers.Authorization =  `Bearer ${response.data.token}`
+
+
+    yield put(actionLoginSuccess());
+    toast.success('Login realizado com sucesso.');
+
+  } catch (error: any) {
+    console.error('Erro no login:', error.response?.data || error.message);
+    const errorMessage = error.response?.data?.message || 'Usuário ou senha inválidos.';
+    toast.error(errorMessage);
+
+    yield put(actionLoginFailure());
   }
 }
 
+function* watchLoginRequest() {
+  yield takeLatest(actionLoginRequest, handleLogin);
+}
+
 export default function* rootSaga() {
-  yield all([takeLatest(buttonClickedRequest.type, handleButtonClick)]);
+  yield watchLoginRequest();
 }
