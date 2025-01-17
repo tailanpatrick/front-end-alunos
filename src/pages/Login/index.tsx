@@ -32,12 +32,6 @@ export default function Login() {
 
     if (formErrors) return;
 
-
-    setTimeout(()=> {
-
-      navigate('/');
-    }, 1000)
-
     dispatch(actionLoginRequest({ email, password }));
   };
 

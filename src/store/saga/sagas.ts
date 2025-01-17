@@ -33,6 +33,10 @@ function* handleLogin(action: { payload: { email: string; password: string } }) 
     yield put(actionLoginSuccess());
     toast.success('Login realizado com sucesso.');
 
+    setTimeout(()=> {
+      window.location.href = '/';
+
+    }, 1000)
   } catch (error: any) {
     console.error('Erro no login:', error.response?.data || error.message);
     const errorMessage = error.response?.data?.message || 'Usuário ou senha inválidos.';
