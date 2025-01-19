@@ -22,7 +22,7 @@ export const StudentContainer = styled.div`
   div {
     display: flex;
     align-items: center;
-    justify-content: space-around;
+    justify-content: space-between;
     padding: 5px 0;
   }
 
