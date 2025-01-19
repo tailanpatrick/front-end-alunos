@@ -7,15 +7,17 @@ import { Link } from "react-router-dom";
 import { FaUserCircle, FaEdit, FaWindowClose } from "react-icons/fa";
 import { Container } from "../../styles/globalstyles";
 import { ProfilePicture, StudentActions, StudentContainer } from "./styled";
+import Loading from "../../components/Loading";
 
 export default function Students() {
   const [students, setStudents] = useState<Student[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     async function getData() {
       try {
+        setLoading(true);
         const response = await axios.get("/students");
         setStudents(response.data);
         setError(null);
@@ -29,14 +31,6 @@ export default function Students() {
     getData();
   }, []);
 
-  if (loading) {
-    return (
-      <Container>
-        <h1>Carregando...</h1>
-      </Container>
-    );
-  }
-
   if (error) {
     return (
       <Container>
@@ -48,6 +42,7 @@ export default function Students() {
 
   return (
     <Container>
+      <Loading isLoading={loading} />
       <h1>Alunos</h1>
 
       <StudentContainer>
