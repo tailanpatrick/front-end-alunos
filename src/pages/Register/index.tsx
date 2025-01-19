@@ -7,10 +7,12 @@ import { useNavigate } from "react-router-dom";
 
 import { Container } from "../../styles/globalstyles";
 import { ContainerForm, Form } from "./styled";
+import Loading from "../../components/Loading";
 
 
 export default function Register() {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState<boolean>(false);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -32,6 +34,7 @@ export default function Register() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
     let formErrors = false;
 
     if(formData.name.length < 4 || formData.name.length > 255){
@@ -54,7 +57,10 @@ export default function Register() {
       toast.error('Senhas não coincidem');
     }
 
-    if (formErrors) return;
+    if (formErrors){
+      setLoading(false);
+      return;
+    }
 
     try {
       const response = await axios.post('/users', {
@@ -64,6 +70,7 @@ export default function Register() {
       });
 
       toast.success('Cadastro realizado com sucesso.');
+      setLoading(false)
       navigate('/login');
     } catch (e) {
       const status = get(e, 'response.status',0);
@@ -74,12 +81,14 @@ export default function Register() {
       } else {
         toast.error("Erro desconhecido.");
       }
+      setLoading(false)
     }
 
   }
 
   return (
     <Container>
+      <Loading isLoading={loading}/>
       <h1>Crie sua conta</h1>
 
       <ContainerForm>
