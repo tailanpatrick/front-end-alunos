@@ -19,32 +19,35 @@ interface LoginResponse {
   };
 }
 
-
 function* handleLogin(action: { payload: { email: string; password: string } }) {
   try {
     const response: LoginResponse = yield call(axios.post, '/tokens', action.payload);
-    console.log('Login bem-sucedido:', response);
+
+    const { user, token } = response.data;
 
     localStorage.setItem('authData', JSON.stringify(response.data));
 
-    axios.defaults.headers.Authorization =  `Bearer ${response.data.token}`
+    axios.defaults.headers.Authorization = `Bearer ${token}`;
 
 
-    yield put(actionLoginSuccess());
+    yield put(actionLoginSuccess({ user, token }));
+
     toast.success('Login realizado com sucesso.');
 
-    setTimeout(()=> {
-      window.location.href = '/';
 
-    }, 1000)
+    setTimeout(() => {
+      window.location.href = '/';
+    }, 1000);
   } catch (error: any) {
-    console.error('Erro no login:', error.response?.data || error.message);
+    console.error('Erro ao realizar login:', error);
+
     const errorMessage = error.response?.data?.message || 'Usuário ou senha inválidos.';
     toast.error(errorMessage);
 
     yield put(actionLoginFailure());
   }
 }
+
 
 function* watchLoginRequest() {
   yield takeLatest(actionLoginRequest, handleLogin);
