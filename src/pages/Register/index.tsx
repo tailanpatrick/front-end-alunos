@@ -25,22 +25,15 @@ export default function Register() {
   const isEditMode = !!user?.id;
 
   useEffect(() => {
-    if (isEditMode && user && (formData.name !== user.name || formData.email !== user.email)) {
-      setFormData({
+    if (isEditMode && user) {
+
+      setFormData((prevState) => ({
+        ...prevState,
         name: user.name || "",
         email: user.email || "",
-        password: "",
-        re_password: "",
-      });
-    } else if (!isEditMode && (formData.name || formData.email)) {
-      setFormData({
-        name: "",
-        email: "",
-        password: "",
-        re_password: "",
-      });
+      }));
     }
-  }, [user, isEditMode, formData]);
+  }, [isEditMode]);
 
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
