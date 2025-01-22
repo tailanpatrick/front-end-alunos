@@ -9,6 +9,7 @@ export type Student =  {
   photo?: Photo;
   createdAt: Date;
   updatedAt: Date;
+  showExclamation?: boolean;
 }
 
 type Photo = {
