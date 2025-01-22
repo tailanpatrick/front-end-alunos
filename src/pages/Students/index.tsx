@@ -4,10 +4,11 @@ import { Student } from "../../types/Student";
 import { get } from "lodash";
 import { Link } from "react-router-dom";
 
-import { FaUserCircle, FaEdit, FaWindowClose } from "react-icons/fa";
+import { FaUserCircle, FaEdit, FaWindowClose, FaExclamation } from "react-icons/fa";
 import { Container } from "../../styles/globalstyles";
 import { ProfilePicture, StudentActions, StudentContainer } from "./styled";
 import Loading from "../../components/Loading";
+import { toast } from "react-toastify";
 
 export default function Students() {
   const [students, setStudents] = useState<Student[]>([]);
@@ -15,21 +16,45 @@ export default function Students() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    async function getData() {
+    const getData = async () => {
       try {
         setLoading(true);
         const response = await axios.get("/students");
-        setStudents(response.data);
+        const studentsWithExclamation = response.data.map((student: Student) => ({
+          ...student,
+          showExclamation: false,
+        }));
+        setStudents(studentsWithExclamation);
         setError(null);
       } catch (err: any) {
-        console.error("Erro ao buscar os estudantes", err);
-        setError("Não foi possível carregar a lista de estudantes");
+        setError("Não foi possível carregar a lista de estudantes.");
       } finally {
         setLoading(false);
       }
-    }
+    };
     getData();
   }, []);
+
+
+  const handleDeleteAsk = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
+    e.preventDefault();
+    const updatedStudents = students.map((student) =>
+      student.id === id ? { ...student, showExclamation: true } : student
+    );
+    setStudents(updatedStudents);
+  };
+
+  const handleDelete = async (id: string) => {
+    try {
+      await axios.delete(`/students/${id}`);
+      const updatedStudents = students.filter((student) => student.id !== id);
+      setStudents(updatedStudents);
+      toast.success("Aluno deletado com sucesso!");
+    } catch (err) {
+      const errors = get(err, "response.data.errors", []);
+      errors.forEach((error) => toast.error(error));
+    }
+  };
 
   if (error) {
     return (
@@ -67,10 +92,20 @@ export default function Students() {
                 <FaEdit size={19} />
               </Link>
 
-              <Link to={`/student/${student.id}/delete`}>
+              <Link
+                onClick={(e) => handleDeleteAsk(e, student.id)}
+                to={`/student/${student.id}/delete`}
+              >
                 <FaWindowClose size={20} />
               </Link>
             </StudentActions>
+            {student.showExclamation && (
+              <FaExclamation
+                size={20}
+                style={{ display: "block", cursor: "pointer" }}
+                onClick={() => handleDelete(student.id)}
+              />
+            )}
           </div>
         ))}
       </StudentContainer>
