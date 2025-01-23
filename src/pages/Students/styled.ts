@@ -1,4 +1,7 @@
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
+import App from './../../App';
+import { FaWindowClose } from 'react-icons/fa';
 
 interface TitleProps {
   isRed?: boolean;
@@ -29,6 +32,14 @@ export const StudentContainer = styled.div`
   div + div {
     border-top: solid 1px lightgray;
   }
+
+  @media(max-width: 620px){
+    .student-email {
+      display: none;
+      float: left;
+    }
+
+  }
 `;
 
 export const ProfilePicture = styled.div`
@@ -42,5 +53,20 @@ export const ProfilePicture = styled.div`
 export const StudentActions = styled.div`
   gap: 25px;
 `;
+
+export const NewStudent = styled(Link)`
+  display: block;
+  padding: 20px 20px 20px;
+  padding-left: 450px;
+  font-weight: 600;
+  font-size: 18px;
+  border-bottom: 1px solid lightslategrey;
+  ;
+
+  @media (max-width: 620px) {
+    padding-left: 0px;
+  }
+`;
+
 
 
