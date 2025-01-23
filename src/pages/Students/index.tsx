@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 
 import { FaUserCircle, FaEdit, FaWindowClose, FaExclamation } from "react-icons/fa";
 import { Container } from "../../styles/globalstyles";
-import { ProfilePicture, StudentActions, StudentContainer } from "./styled";
+import { ProfilePicture, StudentActions, StudentContainer, NewStudent} from "./styled";
 import Loading from "../../components/Loading";
 import { toast } from "react-toastify";
 
@@ -70,6 +70,8 @@ export default function Students() {
       <Loading isLoading={loading} />
       <h1>Alunos</h1>
 
+      <NewStudent to="/student/">Novo Aluno +</NewStudent>
+
       <StudentContainer>
         {students.map((student) => (
           <div key={student.id}>
@@ -84,8 +86,8 @@ export default function Students() {
               <FaUserCircle size={36} />
             )}
 
-            <span>{student.name}</span>
-            <span>{student.email}</span>
+            <span className="student-name">{student.name}</span>
+            <span className="student-email">{student.email}</span>
 
             <StudentActions>
               <Link to={`/student/${student.id}/edit`}>
