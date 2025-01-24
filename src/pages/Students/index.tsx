@@ -3,12 +3,14 @@ import axios from "../../services/axios";
 import { Student } from "../../types/Student";
 import { get } from "lodash";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 
 import { FaUserCircle, FaEdit, FaWindowClose, FaExclamation } from "react-icons/fa";
 import { Container } from "../../styles/globalstyles";
-import { ProfilePicture, StudentActions, StudentContainer, NewStudent} from "./styled";
+import { primaryColor } from "../../config/colors";
+import { ProfilePicture, StudentActions, StudentContainer, NewStudent } from "./styled";
 import Loading from "../../components/Loading";
-import { toast } from "react-toastify";
+
 
 export default function Students() {
   const [students, setStudents] = useState<Student[]>([]);
@@ -38,11 +40,21 @@ export default function Students() {
 
   const handleDeleteAsk = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
     e.preventDefault();
-    const updatedStudents = students.map((student) =>
-      student.id === id ? { ...student, showExclamation: true } : student
+    setStudents((prevStudents) =>
+      prevStudents.map((student) =>
+        student.id === id ? { ...student, showExclamation: true } : student
+      )
     );
-    setStudents(updatedStudents);
+
+    setTimeout(() => {
+      setStudents((prevStudents) =>
+        prevStudents.map((student) =>
+          student.id === id ? { ...student, showExclamation: false } : student
+        )
+      );
+    }, 3000);
   };
+
 
   const handleDelete = async (id: string) => {
     try {
@@ -93,19 +105,20 @@ export default function Students() {
               <Link to={`/student/${student.id}/edit`}>
                 <FaEdit size={19} />
               </Link>
-
-              <Link
-                onClick={(e) => handleDeleteAsk(e, student.id)}
-                to={`/student/${student.id}/delete`}
-              >
-                <FaWindowClose size={20} />
-              </Link>
+              {!student.showExclamation &&
+                <Link
+                  onClick={(e) => handleDeleteAsk(e, student.id)}
+                  to={`/student/${student.id}/delete`}
+                >
+                  <FaWindowClose size={20} />
+                </Link>}
             </StudentActions>
             {student.showExclamation && (
               <FaExclamation
                 size={20}
                 style={{ display: "block", cursor: "pointer" }}
                 onClick={() => handleDelete(student.id)}
+                color={`${primaryColor}`}
               />
             )}
           </div>
