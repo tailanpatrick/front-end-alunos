@@ -98,7 +98,8 @@ export default function Students() {
               <FaUserCircle size={36} />
             )}
 
-            <span className="student-name">{student.name}</span>
+            <span className="student-name">{student.name} {student.surname}</span>
+
             <span className="student-email">{student.email}</span>
 
             <StudentActions>
@@ -119,6 +120,7 @@ export default function Students() {
                 style={{ display: "block", cursor: "pointer" }}
                 onClick={() => handleDelete(student.id)}
                 color={`${primaryColor}`}
+                title={`Clique para excluir ${student.name} ${student.surname}`}
               />
             )}
           </div>
