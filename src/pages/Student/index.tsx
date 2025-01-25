@@ -103,6 +103,42 @@ export default function StudentPage() {
       toast.error('Altura inválida')
       formErrors = true;
     }
+
+    if(formErrors) return;
+
+    try {
+      setLoading(true);
+
+      if(id){
+        await axios.put(`/students/${id}`, {
+          name: formData.name,
+          surname: formData.surname,
+          email: formData.email,
+          age: formData.age,
+          height: formData.height,
+          weight: formData.weight
+        });
+        toast.success('Aluno(a) editado com sucesso!')
+      } else {
+        await axios.post(`/students/`, {
+          name: formData.name,
+          surname: formData.surname,
+          email: formData.email,
+          age: formData.age,
+          height: formData.height,
+          weight: formData.weight
+        });
+        toast.success('Aluno(a) criado com sucesso!')
+        navigate('/')
+      }
+    } catch (err) {
+      const status = Number(get(err, 'response.status', 0))
+        const errors = get(err, 'response.data.errors', [])
+        if(errors.length > 0) errors.map(error => toast.error(error))
+        else toast.error('Erro desconhecido.')
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -121,7 +157,6 @@ export default function StudentPage() {
               name="name"
               placeholder="Nome do Aluno"
             />
-            {formData.name}
           </label>
 
           <label htmlFor="surname">
@@ -133,7 +168,6 @@ export default function StudentPage() {
               name="surname"
               placeholder="Sobrenome do Aluno"
             />
-            {formData.surname}
           </label>
 
           <label htmlFor="email">
@@ -145,7 +179,7 @@ export default function StudentPage() {
               name="email"
               placeholder="Email do Aluno"
             />
-            {formData.email}
+
           </label>
 
 
@@ -159,7 +193,7 @@ export default function StudentPage() {
                 name="age"
                 placeholder="Idade do Aluno"
               />
-              {formData.age}
+
             </label>
 
             <label htmlFor="weight">
@@ -172,7 +206,7 @@ export default function StudentPage() {
                 name="weight"
                 placeholder="Peso do Aluno"
               />
-              {formData.weight}
+
             </label>
 
             <label htmlFor="height">
@@ -185,7 +219,7 @@ export default function StudentPage() {
                 name="height"
                 placeholder="Altura do Aluno"
               />
-              {formData.height}
+
             </label>
           </>
 

@@ -77,7 +77,7 @@ export default function Register() {
     }
 
     try {
-      // Se for edição, faz a atualização do usuário
+
       if (isEditMode) {
         await axios.put(`/users/${user.id}`, {
           name: formData.name,
@@ -85,8 +85,9 @@ export default function Register() {
           password: formData.password || undefined,
         });
         toast.success("Usuário atualizado com sucesso.");
+
+        navigate("/login");
       } else {
-        // Se for criação de novo usuário
         await axios.post("/users", {
           name: formData.name,
           email: formData.email,
