@@ -29,7 +29,10 @@ export default function Students() {
         setStudents(studentsWithExclamation);
         setError(null);
       } catch (err: any) {
-        setError("Não foi possível carregar a lista de estudantes.");
+        const status = Number(get(err, 'response.status', 0))
+                const errors = get(err, 'response.data.errors', [])
+                if(status === 400) errors.map((error: any) => toast.error(error))
+        setError("Não foi possível carregar a lista de estudantes."+ errors[0] + " tente refazer o Login");
       } finally {
         setLoading(false);
       }
