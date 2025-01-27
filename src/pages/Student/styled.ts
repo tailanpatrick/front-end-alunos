@@ -1,15 +1,12 @@
 import styled from 'styled-components';
 import { primaryColor } from './../../config/colors';
 
-interface TitleProps {
-  isRed?: boolean;
-}
 
-export const Title = styled.h1<TitleProps>`
-  background: green;
-
-  small {
-    font-size: 8px;
+export const Title = styled.h1`
+  margin-left: 25px;
+  @media (max-width: 620px){
+    margin-left: 0;
+    text-align: center;
   }
 `;
 

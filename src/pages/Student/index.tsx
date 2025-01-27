@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import { Container } from "../../styles/globalstyles";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { ContainerForm, Form } from "../Register/styled";
-import { ProfilePicture } from "./styled";
+import { ProfilePicture, Title } from "./styled";
 import Loading from "../../components/Loading";
 import axios from "../../services/axios";
 import { get } from "lodash";
@@ -151,7 +151,7 @@ export default function StudentPage() {
   return (
     <Container>
       <Loading isLoading={loading} />
-      <h1>{id ? 'Editar Aluno' : 'Novo Aluno'}</h1>
+      <Title>{id ? 'Editar Aluno' : 'Novo Aluno'}</Title>
 
       {id && (
         <ProfilePicture>
