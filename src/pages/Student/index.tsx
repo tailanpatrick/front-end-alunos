@@ -3,11 +3,14 @@ import { isEmail, isInt, isFloat } from "validator";
 import { toast } from "react-toastify";
 
 import { Container } from "../../styles/globalstyles";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { ContainerForm, Form } from "../Register/styled";
+import { ProfilePicture } from "./styled";
 import Loading from "../../components/Loading";
 import axios from "../../services/axios";
 import { get } from "lodash";
+import { FaEdit, FaUserCircle } from "react-icons/fa";
+
 
 
 
@@ -22,6 +25,8 @@ export default function StudentPage() {
     weight: "",
     height: ""
   });
+
+  const [photo, setPhoto] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -33,6 +38,8 @@ export default function StudentPage() {
         setLoading(true);
         const { data } = await axios.get(`/students/id/${id}`);
         const photo = get(data, 'photo.filePath', '');
+
+        setPhoto(photo);
 
         setFormData((prev) => ({
           ...prev,
@@ -145,6 +152,20 @@ export default function StudentPage() {
     <Container>
       <Loading isLoading={loading} />
       <h1>{id ? 'Editar Aluno' : 'Novo Aluno'}</h1>
+
+      {id && (
+        <ProfilePicture>
+          {photo ? (
+            <img src={photo} alt={`Foto de ${formData.name}`} />
+          ) : (
+            <FaUserCircle size={180}/>
+          )}
+
+          <Link to={`/photos/${id}`}>
+            <FaEdit size={28}/>
+          </Link>
+        </ProfilePicture>
+      )}
 
       <ContainerForm>
         <Form onSubmit={handleSubmit}>
