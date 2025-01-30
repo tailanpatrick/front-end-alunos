@@ -26,13 +26,14 @@ export default function Students() {
           ...student,
           showExclamation: false,
         }));
+
         setStudents(studentsWithExclamation);
         setError(null);
       } catch (err: any) {
         const status = Number(get(err, 'response.status', 0))
-                const errors = get(err, 'response.data.errors', [])
-                if(status === 400) errors.map((error: any) => toast.error(error))
-        setError("Não foi possível carregar a lista de estudantes."+ errors[0] + " tente refazer o Login");
+        const errors = get(err, 'response.data.errors', [])
+        if (status === 400) errors.map((error: any) => toast.error(error))
+        setError("Não foi possível carregar a lista de estudantes." + errors[0] + " tente refazer o Login");
       } finally {
         setLoading(false);
       }
