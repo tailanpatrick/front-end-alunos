@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://192.168.100.175:3000/',
+  baseURL: 'https://rest-api-alunos.vercel.app',
 });
 
 api.interceptors.request.use(
