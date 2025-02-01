@@ -1,17 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { data, useNavigate, useParams } from "react-router-dom";
 import axios from '../../services/axios';
 import { get } from 'lodash';
 import { Container } from "../../styles/globalstyles";
 import Loading from './../../components/Loading/index';
 import { Title, Form } from './styled';
 import { toast } from "react-toastify";
+import { Student } from "../../types/Student";
 
 export default function Photos({ match }: any) {
   const { id } = useParams()
 
   const [loading, setLoading] = useState(false);
+  const [student, setStudent] = useState('');
   const [photo, setPhoto] = useState('');
+  const [photoInfo, setPhotoInfo] = useState<any>();
 
   const navigate = useNavigate()
 
@@ -21,7 +24,10 @@ export default function Photos({ match }: any) {
         setLoading(true);
         const { data } = await axios.get(`/students/id/${id}`);
 
+        setStudent(data.name+ ' '+ data.surname)
         setPhoto(get(data, 'photo.filePath', ''));
+        setPhotoInfo(get(data, 'photo', ''));
+
         setLoading(false);
       } catch (err) {
         toast.error('Erro ao obter a imagem');
@@ -37,7 +43,7 @@ export default function Photos({ match }: any) {
 
     if (photo) {
       const photoUrl = URL.createObjectURL(photo);
-      console.log(photoUrl);
+
       setPhoto(photoUrl);
 
       const formData = new FormData();
@@ -46,11 +52,13 @@ export default function Photos({ match }: any) {
 
       setLoading(true);
       try {
-        axios.post("/photos", formData, {
+        const { data } = await axios.post("/photos", formData, {
           headers: {
             "Content-Type": "multipart/form-data"
           }
         });
+
+        setPhotoInfo(get(data, 'photo.photocreated', null));
 
         toast.success('Foto enviada com sucesso!')
       } catch (err) {
@@ -68,16 +76,35 @@ export default function Photos({ match }: any) {
     }
   };
 
+  const handleDeletePhoto = async () => {
+    setLoading(true);
+    try {
+      await axios.delete(`/photos/${photoInfo?.id}`)
+
+      setPhoto('');
+      setPhotoInfo(null);
+      toast.success('Foto deletada com sucesso!')
+    } catch (err) {
+
+      toast.error('Erro ao deletar foto.');
+
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
     <Container>
       <Loading isLoading={loading} />
-      <Title>Photos</Title>
+      <Title>Foto de {student}</Title>
 
       <Form>
         <label htmlFor="photo">
           {photo ? <img src={photo} alt="Foto" /> : 'Selecionar'}
           <input type="file" id='photo' onChange={handleChange}/>
         </label>
+
+        {photo && <button type="button" onClick={handleDeletePhoto}>Excluir Foto</button> }
       </Form>
     </Container>
   );

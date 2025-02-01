@@ -6,14 +6,16 @@ interface TitleProps {
 }
 
 export const Title = styled.h1<TitleProps>`
-margin-left: 25px;
-  @media (max-width: 620px){
+
     margin-left: 0;
     text-align: center;
-  }
+
 `;
 
 export const Form = styled.form`
+  display: flex;
+  flex-flow: column wrap;
+  align-items: center;
 
   label {
     width: 180px;
@@ -36,5 +38,14 @@ export const Form = styled.form`
   img {
     width: 180px;
     height: 180px;
+  }
+
+  button {
+
+  transition: filter 0.3s ease;
+  }
+
+  button:hover{
+    filter: brightness(1.5);
   }
 `
