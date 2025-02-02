@@ -6,12 +6,17 @@ import axios from "../../services/axios";
 import { Container } from "../../styles/globalstyles";
 import { ContainerForm, Form } from "./styled";
 import Loading from "../../components/Loading";
+import Modal from "react-modal";
+import './modal.css';
+
+import { FaTrash } from "react-icons/fa";
+
+Modal.setAppElement('#root');
 
 export default function Register() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState<boolean>(false);
 
-  // Acessa os dados de autenticação do localStorage
   const authData = JSON.parse(localStorage.getItem("authData") || "{}");
   const { user } = authData;
 
@@ -24,9 +29,10 @@ export default function Register() {
 
   const isEditMode = !!user?.id;
 
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+
   useEffect(() => {
     if (isEditMode && user) {
-
       setFormData((prevState) => ({
         ...prevState,
         name: user.name || "",
@@ -35,10 +41,8 @@ export default function Register() {
     }
   }, [isEditMode]);
 
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
@@ -50,7 +54,6 @@ export default function Register() {
     setLoading(true);
     let formErrors = false;
 
-    // Validação de dados
     if (formData.name.length < 4 || formData.name.length > 255) {
       formErrors = true;
       toast.error("O Nome precisa no mínimo 4 caracteres");
@@ -77,7 +80,6 @@ export default function Register() {
     }
 
     try {
-
       if (isEditMode) {
         await axios.put(`/users/${user.id}`, {
           name: formData.name,
@@ -85,7 +87,6 @@ export default function Register() {
           password: formData.password || undefined,
         });
         toast.success("Usuário atualizado com sucesso.");
-
         navigate("/login");
       } else {
         await axios.post("/users", {
@@ -101,6 +102,27 @@ export default function Register() {
       errors.map((error: string) => toast.error(error));
     } finally {
       setLoading(false);
+    }
+  };
+
+  const openModal = () => {
+    setModalIsOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalIsOpen(false);
+  };
+
+  const deleteAccount = async () => {
+    try {
+      await axios.delete(`/users/${user.id}`);
+      toast.success("Conta excluída com sucesso.");
+      localStorage.removeItem("authData");
+      navigate("/login");
+    } catch (error) {
+      toast.error("Erro ao excluir a conta.");
+    } finally {
+      closeModal();
     }
   };
 
@@ -133,35 +155,62 @@ export default function Register() {
             />
           </label>
 
+          <label htmlFor="password">
+            Senha:
+            <input
+              type="password"
+              value={formData.password}
+              onChange={handleChange}
+              name="password"
+              placeholder={!isEditMode ? 'Crie sua senha' : 'Edite sua senha'}
+            />
+          </label>
 
-          <>
-            <label htmlFor="password">
-              Senha:
-              <input
-                type="password"
-                value={formData.password}
-                onChange={handleChange}
-                name="password"
-                placeholder={!isEditMode ? 'Crie sua senha' : 'Edite sua senha'}
-              />
-            </label>
-
-            <label htmlFor="re_password">
-              Repetir Senha:
-              <input
-                type="password"
-                value={formData.re_password}
-                onChange={handleChange}
-                name="re_password"
-                placeholder="Repita sua senha"
-              />
-            </label>
-          </>
-
+          <label htmlFor="re_password">
+            Repetir Senha:
+            <input
+              type="password"
+              value={formData.re_password}
+              onChange={handleChange}
+              name="re_password"
+              placeholder="Repita sua senha"
+            />
+          </label>
 
           <button type="submit">
             {isEditMode ? "Salvar Alterações" : "Criar minha conta"}
           </button>
+
+          {isEditMode && (
+            <>
+              <button
+                type="button"
+                onClick={openModal}
+                style={{
+                  display: "flex",
+                  gap: "6px",
+                  justifyContent: "center",
+                }}
+              >
+                Apagar minha conta
+                <FaTrash size={16} />
+              </button>
+
+              <Modal
+                isOpen={modalIsOpen}
+                onRequestClose={closeModal}
+                contentLabel="Tem certeza que deseja excluir sua conta?"
+                className="modal-content"
+                overlayClassName="modal-overlay"
+              >
+                <h2>Tem certeza que deseja excluir sua conta?</h2>
+                <button onClick={deleteAccount}>Sim, excluir</button>
+                <button onClick={closeModal} style={{
+                  background:'gray'
+                }}>Não</button>
+              </Modal>
+            </>
+          )}
         </Form>
       </ContainerForm>
     </Container>
